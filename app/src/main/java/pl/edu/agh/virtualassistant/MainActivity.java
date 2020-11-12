@@ -1,8 +1,10 @@
 package pl.edu.agh.virtualassistant;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import pl.edu.agh.virtualassistant.service.WeatherService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,5 +13,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        WeatherService.getCurrentWeatherForCity(this, "Prague");
     }
+
 }

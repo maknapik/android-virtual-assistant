@@ -2,7 +2,7 @@ package pl.edu.agh.virtualassistant.model;
 
 import java.util.List;
 
-public class ResponseWeather{
+public class Weather {
 	private int visibility;
 	private int timezone;
 	private Main main;

@@ -1,6 +1,7 @@
 package pl.edu.agh.virtualassistant;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,7 +15,11 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        WeatherService.getCurrentWeatherForCity(this, "Prague");
+        TextView temp = findViewById(R.id.Temp);
+
+        WeatherService.getTemperatureForCity(this, "Kraków", val -> {
+            temp.setText(String.valueOf(val));
+        });
     }
 
 }

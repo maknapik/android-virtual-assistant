@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 public class HttpClient {
 
     public static void sendRequest(Context context, int method, String url, JSONObject jsonRequest,
-                            Consumer<JSONObject> onResponseCallback,
-                                   Consumer<VolleyError> onErrorResponseCallback) {
+                                       Consumer<JSONObject> onResponseCallback,
+                                       Consumer<VolleyError> onErrorResponseCallback) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(method, url,
                 jsonRequest, onResponseCallback::accept, onErrorResponseCallback::accept);
 

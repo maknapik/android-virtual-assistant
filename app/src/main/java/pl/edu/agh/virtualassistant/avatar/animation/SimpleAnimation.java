@@ -1,12 +1,34 @@
 package pl.edu.agh.virtualassistant.avatar.animation;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 
+import java.util.List;
+
 import pl.edu.agh.virtualassistant.R;
+import pl.edu.agh.virtualassistant.avatar.utils.AvatarHelpers;
 
 public class SimpleAnimation {
-    public static Drawable getAnimationFrame(Resources resources, int frameNumber) {
+    public static AnimationDrawable getSimpleAnimation(Resources resources, String output) {
+        AnimationDrawable anim = new AnimationDrawable();
+        List<Integer> expressions = AvatarHelpers.getExpressions(output);
+        for (Integer expression : expressions) {
+            anim.addFrame(SimpleAnimation.getAnimationFrame(resources, expression), 200);
+        }
+
+        // wink anim
+        anim.addFrame(SimpleAnimation.getAnimationFrame(resources, 1), 1000);
+        anim.addFrame(SimpleAnimation.getAnimationFrame(resources, 0), 150);
+        anim.addFrame(SimpleAnimation.getAnimationFrame(resources, 1), 100);
+
+        return anim;
+    }
+
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private static Drawable getAnimationFrame(Resources resources, int frameNumber) {
         switch (frameNumber) {
             case 0:
                 return resources.getDrawable(R.drawable.mouth_1a);

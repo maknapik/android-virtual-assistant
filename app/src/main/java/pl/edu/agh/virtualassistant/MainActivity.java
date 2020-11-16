@@ -12,19 +12,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
-import pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation;
-import pl.edu.agh.virtualassistant.avatar.utils.AvatarHelpers;
 import pl.edu.agh.virtualassistant.service.WeatherService;
 import pl.edu.agh.virtualassistant.voice.VoiceControl;
 
+import static pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation.getSimpleAnimation;
+
 public class MainActivity extends AppCompatActivity {
-    ImageView imageView;
-
-    DecimalFormat temperatureFormat = new DecimalFormat("0.#");
+    private static final DecimalFormat temperatureFormat = new DecimalFormat("0.#");
+    private ImageView imageView;
     private VoiceControl voiceControl;
-
     private TextView tempTextView;
 
     @Override
@@ -40,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         tempTextView = findViewById(R.id.Temp);
-
         imageView = findViewById(R.id.avatarImage);
         imageView.setBackgroundResource(R.drawable.mouth_1);
     }
@@ -57,24 +53,15 @@ public class MainActivity extends AppCompatActivity {
                 temperature -> {
                     String response = "Temperature in " + city + " is " + temperatureFormat.format(temperature) + " degrees Celsius.";
                     voiceControl.say(response);
-                    onStartAnimation();
+                    startAnimation();
                     tempTextView.setText(response);
                 },
                 error -> voiceControl.say("I cannot check the temperature for this place."));
     }
 
-    private void onStartAnimation() {
+    private void startAnimation() {
         String output = tempTextView.getText().toString();
-        AnimationDrawable anim = new AnimationDrawable();
-        List<Integer> expressions = AvatarHelpers.getExpressions(output);
-        for(Integer expression : expressions) {
-            anim.addFrame(SimpleAnimation.getAnimationFrame(getResources(), expression), 200);
-        }
-
-        // wink anim
-        anim.addFrame(SimpleAnimation.getAnimationFrame(getResources(), 1), 1000);
-        anim.addFrame(SimpleAnimation.getAnimationFrame(getResources(),0), 150);
-        anim.addFrame(SimpleAnimation.getAnimationFrame(getResources(),1), 100);
+        AnimationDrawable anim = getSimpleAnimation(getResources(), output);
 
         anim.setOneShot(true);
         imageView.setImageDrawable(anim);

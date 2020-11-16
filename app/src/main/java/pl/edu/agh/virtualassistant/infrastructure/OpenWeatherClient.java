@@ -11,9 +11,9 @@ import org.json.JSONObject;
 import java.util.function.Consumer;
 
 import pl.edu.agh.virtualassistant.error.Notification;
+import pl.edu.agh.virtualassistant.model.CitiesInCircleWeather;
 import pl.edu.agh.virtualassistant.model.LocationDailyWeather;
 import pl.edu.agh.virtualassistant.model.Weather;
-import pl.edu.agh.virtualassistant.model.CitiesInCircleWeather;
 
 public class OpenWeatherClient {
 
@@ -22,11 +22,16 @@ public class OpenWeatherClient {
 
     public static void getCurrentWeatherForCity(Context context, String cityName,
                                                 Consumer<Weather> onResponseCallback) {
+        getCurrentWeatherForCity(context, cityName, onResponseCallback, getOnErrorResponseCallback(context));
+    }
+
+    public static void getCurrentWeatherForCity(Context context, String cityName,
+                                                Consumer<Weather> onResponseCallback, Consumer<VolleyError> onErrorCallback) {
         String url = API_ENDPOINT + "weather?q=" + cityName + getApiKeySuffix();
 
         HttpClient.sendRequest(context, Request.Method.GET, url, null,
                 getOnResponseCallback(onResponseCallback, Weather.class),
-                getOnErrorResponseCallback(context));
+                onErrorCallback);
     }
 
     private static String getApiKeySuffix() {

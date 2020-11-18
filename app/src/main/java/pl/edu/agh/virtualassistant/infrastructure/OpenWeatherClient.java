@@ -75,4 +75,16 @@ public class OpenWeatherClient {
                 getOnErrorResponseCallback(context));
     }
 
+    public static void getWeatherInCitiesInCircle(Context context, String latitude, String longitude,
+                                                  int citiesNumber,
+                                                  Consumer<CitiesInCircleWeather> onResponseCallback,
+                                                  Consumer<VolleyError> onErrorCallback) {
+        String url = API_ENDPOINT + "find?lat=" + latitude + "&lon=" + longitude + "&cnt="
+                + citiesNumber + getApiKeySuffix();
+
+        HttpClient.sendRequest(context, Request.Method.GET, url, null,
+                getOnResponseCallback(onResponseCallback, CitiesInCircleWeather.class),
+                onErrorCallback);
+    }
+
 }

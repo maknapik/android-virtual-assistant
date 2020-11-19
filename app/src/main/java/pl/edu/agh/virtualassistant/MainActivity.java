@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,10 +14,9 @@ import androidx.core.content.ContextCompat;
 
 import java.text.DecimalFormat;
 
-import pl.edu.agh.virtualassistant.service.WeatherService;
 import pl.edu.agh.virtualassistant.voice.VoiceControl;
 
-import static pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation.getSimpleAnimation;
+import static pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation.getSimpleTalkingAnimation;
 
 public class MainActivity extends AppCompatActivity {
     private static final DecimalFormat temperatureFormat = new DecimalFormat("0.#");
@@ -24,18 +24,20 @@ public class MainActivity extends AppCompatActivity {
     private RequestResolver requestResolver;
     private ImageView imageView;
     private TextView tempTextView;
-
+    private Handler handler;
+    private AnimationDrawable avatarAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        handler = new Handler();
         requestPermissions();
 
-        voiceControl = new VoiceControl(getApplicationContext());
+        voiceControl = new VoiceControl(this);
         requestResolver = new RequestResolver(voiceControl, this);
         voiceControl.setUp(
-                bundle -> tempTextView.setText("Say the name of the city to hear the temperature that is currently in it."),
+                bundle -> tempTextView.setText("Ask for temperature or humidity in a city of your choosing."),
                 requestResolver::respondToRequest);
 
         tempTextView = findViewById(R.id.Temp);
@@ -50,13 +52,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     public void startAvatarAnimation() {
-        String output = tempTextView.getText().toString();
-        AnimationDrawable anim = getSimpleAnimation(getResources(), output);
+        avatarAnimation = getSimpleTalkingAnimation(getResources());
 
-        anim.setOneShot(true);
-        imageView.setImageDrawable(anim);
-        anim.start();
+        avatarAnimation.setOneShot(false);
+        imageView.setImageDrawable(avatarAnimation);
+        avatarAnimation.start();
+    }
+
+    public void stopAvatarAnimation() {
+        if (avatarAnimation != null) {
+            avatarAnimation.stop();
+        }
+        imageView.setImageResource(R.drawable.mouth_1);
+    }
+
+    public void runInMainThread(Runnable runnable) {
+        handler.post(runnable);
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -13,18 +14,20 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
+import pl.edu.agh.virtualassistant.MainActivity;
+
 public class VoiceControl {
 
     private TextToSpeech textToSpeech;
     private SpeechRecognizer speechRecognizer;
     private final Locale locale;
     private Intent speechRecognizerIntent;
-    private final Context context;
+    private final MainActivity mainActivity;
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
-    public VoiceControl(Context context) {
+    public VoiceControl(MainActivity mainActivity) {
         locale = Locale.ENGLISH;
-        this.context = context;
+        this.mainActivity = mainActivity;
     }
 
     /**
@@ -35,21 +38,22 @@ public class VoiceControl {
      *                            Recognized text is given as an argument.
      */
     public void setUp(Consumer<Bundle> readyForSpeech, Consumer<String> onRecognitionResult) {
-        textToSpeech = new TextToSpeech(context, status -> {
+        textToSpeech = new TextToSpeech(mainActivity, status -> {
             if (status != TextToSpeech.ERROR) {
                 textToSpeech.setLanguage(locale);
+                textToSpeech.setOnUtteranceProgressListener(new OnUtteranceProgressListener());
             } else {
                 System.out.println("Error on setting up text to speech.");
             }
         });
-        if (!SpeechRecognizer.isRecognitionAvailable(context)) {
-            Toast.makeText(context, "Speech recognition is not available on this device. The application will not work", Toast.LENGTH_LONG).show();
+        if (!SpeechRecognizer.isRecognitionAvailable(mainActivity)) {
+            Toast.makeText(mainActivity, "Speech recognition is not available on this device. The application will not work", Toast.LENGTH_LONG).show();
             System.out.println("Speech recognition is not available on this device. The application will not work");
             initialized.set(false);
             return;
         }
 
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(mainActivity);
         speechRecognizer.setRecognitionListener(new RecognitionListenerImpl() {
             @Override
             public void onError(int error) {
@@ -90,7 +94,6 @@ public class VoiceControl {
     public void say(String textToSpeak) {
         speechRecognizer.stopListening();
         textToSpeech.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null, Long.toString(System.currentTimeMillis()));
-        startListening();
     }
 
     private void startListening() {
@@ -99,5 +102,22 @@ public class VoiceControl {
 
     public boolean isInitialized() {
         return initialized.get();
+    }
+
+    private class OnUtteranceProgressListener extends UtteranceProgressListener {
+        @Override
+        public void onStart(String utteranceId) {
+            mainActivity.runInMainThread(mainActivity::startAvatarAnimation);
+        }
+
+        @Override
+        public void onDone(String utteranceId) {
+            mainActivity.runInMainThread(mainActivity::stopAvatarAnimation);
+            mainActivity.runInMainThread(VoiceControl.this::startListening);
+        }
+
+        @Override
+        public void onError(String utteranceId) {
+        }
     }
 }

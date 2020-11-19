@@ -23,15 +23,11 @@ public class RequestResolver {
         Optional<String> retrievedCityName = findCityName(userRequest);
         if (userRequest.contains("temperature") && retrievedCityName.isPresent()) {
             WeatherService.getTemperatureForCity(mainActivity, retrievedCityName.get(),
-                    temperature -> {
-                        say("Temperature in " + retrievedCityName.get() + " is " + temperatureFormat.format(temperature) + " degrees Celsius.");
-                    },
+                    temperature -> say("Temperature in " + retrievedCityName.get() + " is " + temperatureFormat.format(temperature) + " degrees Celsius."),
                     error -> voiceControl.say("I cannot check the temperature for this place."));
         } else if(userRequest.contains("humidity") && retrievedCityName.isPresent()) {
             WeatherService.getHumidityForCity(mainActivity, retrievedCityName.get(),
-                    humidity -> {
-                        say("Humidity in " + retrievedCityName.get() + " is " + humidity + "%");
-                    },
+                    humidity -> say("Humidity in " + retrievedCityName.get() + " is " + humidity + "%"),
                     error -> voiceControl.say("I cannot check the humidity for this place."));
         } else {
             voiceControl.say("I don't understand.");
@@ -40,7 +36,6 @@ public class RequestResolver {
 
     private void say(String response) {
         voiceControl.say(response);
-        mainActivity.startAvatarAnimation();
     }
 
     /**

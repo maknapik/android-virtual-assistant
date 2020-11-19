@@ -26,6 +26,15 @@ public class SimpleAnimation {
         return anim;
     }
 
+    public static AnimationDrawable getSimpleTalkingAnimation(Resources resources) {
+        AnimationDrawable anim = new AnimationDrawable();
+        int[] expressions = new int[] { 2, 3 };
+        for (Integer expression : expressions) {
+            anim.addFrame(SimpleAnimation.getAnimationFrame(resources, expression), 200);
+        }
+        return anim;
+    }
+
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private static Drawable getAnimationFrame(Resources resources, int frameNumber) {

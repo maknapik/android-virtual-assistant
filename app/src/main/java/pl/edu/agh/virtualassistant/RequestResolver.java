@@ -24,11 +24,11 @@ public class RequestResolver {
         if (userRequest.contains("temperature") && retrievedCityName.isPresent()) {
             WeatherService.getTemperatureForCity(mainActivity, retrievedCityName.get(),
                     temperature -> say("Temperature in " + retrievedCityName.get() + " is " + temperatureFormat.format(temperature) + " degrees Celsius."),
-                    error -> voiceControl.say("I cannot check the temperature for this place."));
-        } else if(userRequest.contains("humidity") && retrievedCityName.isPresent()) {
+                    error -> say("I cannot check the temperature for this place."));
+        } else if (userRequest.contains("humidity") && retrievedCityName.isPresent()) {
             WeatherService.getHumidityForCity(mainActivity, retrievedCityName.get(),
                     humidity -> say("Humidity in " + retrievedCityName.get() + " is " + humidity + "%"),
-                    error -> voiceControl.say("I cannot check the humidity for this place."));
+                    error -> say("I cannot check the humidity for this place."));
         } else {
             voiceControl.say("I don't understand.");
         }
@@ -40,9 +40,9 @@ public class RequestResolver {
 
     /**
      * Finds a name of a city in an utterance, assuming that:
-     *  - the first word in an utterance is NOT a part of a city name
-     *  - the first sequence of capitalized words in an utterance IS a city name
-     * */
+     * - the first word in an utterance is NOT a part of a city name
+     * - the first sequence of capitalized words in an utterance IS a city name
+     */
     private Optional<String> findCityName(String userRequest) {
         String sentence = userRequest.substring(0, 1).toLowerCase() + userRequest.substring(1);
         Pattern cityPattern = Pattern.compile("(\\b(?:[A-Z][a-z]*\\b\\s*)+)");

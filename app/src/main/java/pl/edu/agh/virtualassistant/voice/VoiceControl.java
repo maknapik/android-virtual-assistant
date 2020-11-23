@@ -1,6 +1,5 @@
 package pl.edu.agh.virtualassistant.voice;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -9,12 +8,15 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.widget.Toast;
 
+import com.google.android.material.chip.Chip;
+
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import pl.edu.agh.virtualassistant.MainActivity;
+import pl.edu.agh.virtualassistant.R;
 
 public class VoiceControl {
 
@@ -84,7 +86,8 @@ public class VoiceControl {
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale.getLanguage());
         speechRecognizerIntent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{locale.getLanguage()});
 
-        startListening();
+        Chip startButton = mainActivity.findViewById(R.id.startButton);
+        startButton.setOnClickListener(v -> startListening());
         initialized.set(true);
     }
 
@@ -105,6 +108,7 @@ public class VoiceControl {
     }
 
     private class OnUtteranceProgressListener extends UtteranceProgressListener {
+
         @Override
         public void onStart(String utteranceId) {
             mainActivity.runInMainThread(mainActivity::startAvatarAnimation);
@@ -113,7 +117,6 @@ public class VoiceControl {
         @Override
         public void onDone(String utteranceId) {
             mainActivity.runInMainThread(mainActivity::stopAvatarAnimation);
-            mainActivity.runInMainThread(VoiceControl.this::startListening);
         }
 
         @Override

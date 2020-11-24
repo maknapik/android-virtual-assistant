@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
             // necessary permission for voice control functions
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // necessary permission for voice control functions
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
     }
 
     public void startAvatarAnimation() {

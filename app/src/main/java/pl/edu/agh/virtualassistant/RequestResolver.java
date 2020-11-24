@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pl.edu.agh.virtualassistant.service.LocationService;
 import pl.edu.agh.virtualassistant.service.WeatherService;
 import pl.edu.agh.virtualassistant.voice.VoiceControl;
 
@@ -29,6 +30,15 @@ public class RequestResolver {
             WeatherService.getHumidityForCity(mainActivity, retrievedCityName.get(),
                     humidity -> say("Humidity in " + retrievedCityName.get() + " is " + humidity + "%"),
                     error -> say("I cannot check the humidity for this place."));
+        } else if(userRequest.contains("current location") && userRequest.contains("weather")) {
+            LocationService.getLocation(mainActivity, location -> {
+                String latitude = String.valueOf(location.getLatitude());
+                String longitude = String.valueOf(location.getLongitude());
+                WeatherService.getDescriptionForLocation(mainActivity, latitude, longitude,
+                        description -> say("The weather at current location can be described as " + description),
+                        error -> say("I cannot check the weather for current location"));
+            });
+
         } else {
             voiceControl.say("I don't understand.");
         }

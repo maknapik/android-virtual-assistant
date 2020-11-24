@@ -5,6 +5,7 @@ import java.util.List;
 
 import pl.edu.agh.virtualassistant.model.CitiesInCircleWeather;
 import pl.edu.agh.virtualassistant.model.ListItem;
+import pl.edu.agh.virtualassistant.model.LocationDailyWeather;
 import pl.edu.agh.virtualassistant.model.ShortWeather;
 import pl.edu.agh.virtualassistant.model.Weather;
 import pl.edu.agh.virtualassistant.model.WeatherItem;
@@ -16,7 +17,18 @@ public class OpenWeatherConverter {
 
     public static String getDescription(Weather weather) {
         List<WeatherItem> weatherItemList = weather.getWeather();
+
+        return getDescriptionFromWeatherItemList(weatherItemList);
+    }
+
+    private static String getDescriptionFromWeatherItemList(List<WeatherItem> weatherItemList) {
         return weatherItemList.isEmpty() ? NO_DESCRIPTION_LABEL : weatherItemList.get(0).getDescription();
+    }
+
+    public static String getDescription(LocationDailyWeather locationDailyWeather) {
+        List<WeatherItem> weatherItemList = locationDailyWeather.getCurrent().getWeather();
+
+        return getDescriptionFromWeatherItemList(weatherItemList);
     }
 
     public static ShortWeather getShortWeather(Weather weather) {
@@ -31,8 +43,16 @@ public class OpenWeatherConverter {
         return weather.getMain().getTemp() - KELVIN;
     }
 
+    public static double getTemperature(LocationDailyWeather locationDailyWeather) {
+        return locationDailyWeather.getCurrent().getTemp() - KELVIN;
+    }
+
     public static int getHumidity(Weather weather) {
         return weather.getMain().getHumidity();
+    }
+
+    public static int getHumidity(LocationDailyWeather locationDailyWeather) {
+        return locationDailyWeather.getCurrent().getHumidity();
     }
 
     public static double getWindSpeed(Weather weather) {

@@ -14,4 +14,13 @@ public class Notification {
                 .show();
     }
 
+    public static void showLocationError(Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle("Location error")
+                .setMessage("Cannot acquire current location.")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {})
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 }

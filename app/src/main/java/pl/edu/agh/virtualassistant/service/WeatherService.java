@@ -57,6 +57,28 @@ public class WeatherService {
                 onErrorCallback);
     }
 
+    public static void getDescriptionForLocation(Context context, String latitude, String longitude,
+                                                 Consumer<String> onResponseCallback,
+                                                 Consumer<VolleyError> onErrorCallback) {
+        OpenWeatherClient.getDailyWeatherForLocation(context, latitude, longitude,
+                getOnResponseCallback(onResponseCallback, OpenWeatherConverter::getDescription),
+                onErrorCallback);
+    }
+
+    public static void getTemperatureForLocation(Context context, String latitude, String longitude,
+                                             Consumer<Double> onResponseCallback, Consumer<VolleyError> onErrorCallback) {
+        OpenWeatherClient.getDailyWeatherForLocation(context, latitude, longitude,
+                getOnResponseCallback(onResponseCallback, OpenWeatherConverter::getTemperature),
+                onErrorCallback);
+    }
+
+    public static void getHumidityForLocation(Context context, String latitude, String longitude,
+                                                 Consumer<Integer> onResponseCallback, Consumer<VolleyError> onErrorCallback) {
+        OpenWeatherClient.getDailyWeatherForLocation(context, latitude, longitude,
+                getOnResponseCallback(onResponseCallback, OpenWeatherConverter::getHumidity),
+                onErrorCallback);
+    }
+
     public static void getShortWeatherForCitiesInCircle(Context context, String latitude,
                                                         String longitude, int citiesNumber,
                                                         Consumer<List<ShortWeather>> onResponseCallback,

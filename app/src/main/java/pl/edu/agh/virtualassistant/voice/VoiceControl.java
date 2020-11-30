@@ -88,6 +88,7 @@ public class VoiceControl {
 
         Chip startButton = mainActivity.findViewById(R.id.startButton);
         startButton.setOnClickListener(v -> startListening());
+
         initialized.set(true);
     }
 
@@ -96,6 +97,7 @@ public class VoiceControl {
      **/
     public void say(String textToSpeak) {
         speechRecognizer.stopListening();
+        mainActivity.runInMainThread(() -> mainActivity.startAvatarAnimation(textToSpeak));
         textToSpeech.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null, Long.toString(System.currentTimeMillis()));
     }
 
@@ -111,7 +113,7 @@ public class VoiceControl {
 
         @Override
         public void onStart(String utteranceId) {
-            mainActivity.runInMainThread(mainActivity::startAvatarAnimation);
+
         }
 
         @Override

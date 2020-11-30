@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         tempTextView = findViewById(R.id.Temp);
         imageView = findViewById(R.id.avatarImage);
-        imageView.setBackgroundResource(R.drawable.mouth_1);
+        imageView.setBackgroundResource(R.drawable.mouth_1a);
     }
 
     private void requestPermissions() {
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void startAvatarAnimation() {
-        avatarAnimation = getSimpleTalkingAnimation(getResources());
+    public void startAvatarAnimation(String textToSpeak) {
+        avatarAnimation = getSimpleTalkingAnimation(getResources(), textToSpeak);
 
         avatarAnimation.setOneShot(false);
         imageView.setImageDrawable(avatarAnimation);
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         if (avatarAnimation != null) {
             avatarAnimation.stop();
         }
-        imageView.setImageResource(R.drawable.mouth_1);
+        imageView.setImageResource(R.drawable.mouth_1a);
     }
 
     public void runInMainThread(Runnable runnable) {

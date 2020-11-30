@@ -25,11 +25,11 @@ public class RequestResolver {
         if (userRequest.contains("temperature") && retrievedCityName.isPresent()) {
             WeatherService.getTemperatureForCity(mainActivity, retrievedCityName.get(),
                     temperature -> say("Temperature in " + retrievedCityName.get() + " is " + temperatureFormat.format(temperature) + " degrees Celsius."),
-                    error -> say("I cannot check the temperature for this place."));
+                    error -> voiceControl.say("I cannot check the temperature for this place."));
         } else if (userRequest.contains("humidity") && retrievedCityName.isPresent()) {
             WeatherService.getHumidityForCity(mainActivity, retrievedCityName.get(),
                     humidity -> say("Humidity in " + retrievedCityName.get() + " is " + humidity + "%"),
-                    error -> say("I cannot check the humidity for this place."));
+                    error ->  voiceControl.say("I cannot check the humidity for this place."));
         } else if(userRequest.contains("current location") && userRequest.contains("weather")) {
             LocationService.getLocation(mainActivity, location -> {
                 String latitude = String.valueOf(location.getLatitude());

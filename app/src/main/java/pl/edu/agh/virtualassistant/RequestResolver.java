@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import pl.edu.agh.virtualassistant.service.JokeService;
 import pl.edu.agh.virtualassistant.service.LocationService;
 import pl.edu.agh.virtualassistant.service.WeatherService;
 import pl.edu.agh.virtualassistant.voice.VoiceControl;
@@ -38,7 +39,10 @@ public class RequestResolver {
                         description -> say("The weather at current location can be described as " + description),
                         error -> say("I cannot check the weather for current location"));
             });
-
+        } else if (userRequest.contains("joke")) {
+            JokeService.getRandomJoke(mainActivity,
+                    joke -> say("Joke for today is: " + joke),
+                    error -> say("I don't know any jokes."));
         } else {
             voiceControl.say("I don't understand.");
         }

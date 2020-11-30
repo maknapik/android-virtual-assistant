@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 import pl.edu.agh.virtualassistant.model.joke.JokeResponse;
 
 public class JokeClient {
-    private final static String JOKE_API_KEY = "596412dfa2mshcd04b06d149b8eap1a6864jsn5f27c67e5715";
     private final static String JOKE_API_ENDPOINT = "https://api.jokes.one/jod";
 
     public static void getRandomJoke(Context context, Consumer<JokeResponse> onResponseCallback, Consumer<VolleyError> onErrorCallback) {
@@ -27,7 +26,6 @@ public class JokeClient {
     private static Map<String, String> getRequestHeaders() {
         Map<String, String> params = new ArrayMap<>();
         params.put("Content-Type", "application/json");
-        params.put("X-JokesOne-Api-Secret", JOKE_API_KEY);
         return params;
     }
 

@@ -8,6 +8,8 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.ViewUtils;
+
 import com.google.android.material.chip.Chip;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class VoiceControl {
     private Intent speechRecognizerIntent;
     private final MainActivity mainActivity;
     private final AtomicBoolean initialized = new AtomicBoolean(false);
+    Consumer<Bundle> readyForSpeech;
+    Consumer<String> onRecognitionResult;
 
     public VoiceControl(MainActivity mainActivity) {
         locale = Locale.ENGLISH;
@@ -40,6 +44,10 @@ public class VoiceControl {
      *                            Recognized text is given as an argument.
      */
     public void setUp(Consumer<Bundle> readyForSpeech, Consumer<String> onRecognitionResult) {
+        this.readyForSpeech = readyForSpeech;
+        this.onRecognitionResult = onRecognitionResult;
+        assert readyForSpeech != null && onRecognitionResult != null;
+
         textToSpeech = new TextToSpeech(mainActivity, status -> {
             if (status != TextToSpeech.ERROR) {
                 textToSpeech.setLanguage(locale);
@@ -56,6 +64,33 @@ public class VoiceControl {
         }
 
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(mainActivity);
+        setSpeechRecognitionCallbacks(readyForSpeech, onRecognitionResult);
+
+        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale.getLanguage());
+        speechRecognizerIntent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{locale.getLanguage()});
+
+        Chip startButton = mainActivity.findViewById(R.id.startButton);
+        startButton.setOnClickListener(v -> startListening());
+
+        initialized.set(true);
+    }
+
+    /**
+     * Sets given speech recognition callbacks {@see #setUp}. Callback that do not need to be changed should be set to null.
+     *
+     * @param readyForSpeech      function executed once speech-to-text service is ready to receive input.
+     * @param onRecognitionResult function executed when speech-to-text recognizes a complete utterance (a word or sentence followed by a short pause).
+     *                            Recognized text is given as an argument.
+     */
+    public void setSpeechRecognitionCallbacks(Consumer<Bundle> readyForSpeech, Consumer<String> onRecognitionResult) {
+        if (readyForSpeech != null) {
+            this.readyForSpeech = readyForSpeech;
+        }
+        if (onRecognitionResult != null) {
+            this.onRecognitionResult = onRecognitionResult;
+        }
         speechRecognizer.setRecognitionListener(new RecognitionListenerImpl() {
             @Override
             public void onError(int error) {
@@ -70,26 +105,16 @@ public class VoiceControl {
 
             @Override
             public void onReadyForSpeech(Bundle params) {
-                readyForSpeech.accept(params);
+                VoiceControl.this.readyForSpeech.accept(params);
             }
 
             @Override
             public void onResults(Bundle results) {
                 ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 System.out.println(data);
-                onRecognitionResult.accept(data.get(0));
+                VoiceControl.this.onRecognitionResult.accept(data.get(0));
             }
         });
-
-        speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale.getLanguage());
-        speechRecognizerIntent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{locale.getLanguage()});
-
-        Chip startButton = mainActivity.findViewById(R.id.startButton);
-        startButton.setOnClickListener(v -> startListening());
-
-        initialized.set(true);
     }
 
     /**

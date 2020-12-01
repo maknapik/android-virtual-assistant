@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 
 import java.text.DecimalFormat;
 
+import pl.edu.agh.virtualassistant.interaction.ResponseResolver;
 import pl.edu.agh.virtualassistant.voice.VoiceControl;
 
 import static pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation.getSimpleTalkingAnimation;
@@ -21,7 +22,7 @@ import static pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation.getSi
 public class MainActivity extends AppCompatActivity {
     private static final DecimalFormat temperatureFormat = new DecimalFormat("0.#");
     private VoiceControl voiceControl;
-    private RequestResolver requestResolver;
+    private ResponseResolver responseResolver;
     private ImageView imageView;
     private TextView tempTextView;
     private Handler handler;
@@ -35,10 +36,10 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions();
 
         voiceControl = new VoiceControl(this);
-        requestResolver = new RequestResolver(voiceControl, this);
+        responseResolver = new ResponseResolver(voiceControl, this);
         voiceControl.setUp(
                 bundle -> tempTextView.setText("Ask for temperature or humidity in a city of your choosing."),
-                requestResolver::respondToRequest);
+                responseResolver::respond);
 
         tempTextView = findViewById(R.id.Temp);
         imageView = findViewById(R.id.avatarImage);
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // necessary permission for voice control functions
+            // necessary permission for location-related functions
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
     }

@@ -8,6 +8,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import pl.edu.agh.virtualassistant.error.Notification;
@@ -29,4 +30,11 @@ public class LocationService {
         });
     }
 
+    public static void getLocation(Context context, BiConsumer<String, String> onResponseCallback) {
+        getLocation(context, location -> {
+            String latitude = String.valueOf(location.getLatitude());
+            String longitude = String.valueOf(location.getLongitude());
+            onResponseCallback.accept(latitude, longitude);
+        });
+    }
 }

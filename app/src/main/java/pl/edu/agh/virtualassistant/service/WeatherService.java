@@ -49,7 +49,6 @@ public class WeatherService {
     }
 
 
-
     public static void getWindSpeedForCity(Context context, String cityName, Consumer<Double> onResponseCallback,
                                            Consumer<VolleyError> onErrorCallback) {
         OpenWeatherClient.getCurrentWeatherForCity(context, cityName,
@@ -66,14 +65,14 @@ public class WeatherService {
     }
 
     public static void getTemperatureForLocation(Context context, String latitude, String longitude,
-                                             Consumer<Double> onResponseCallback, Consumer<VolleyError> onErrorCallback) {
+                                                 Consumer<Double> onResponseCallback, Consumer<VolleyError> onErrorCallback) {
         OpenWeatherClient.getDailyWeatherForLocation(context, latitude, longitude,
                 getOnResponseCallback(onResponseCallback, OpenWeatherConverter::getTemperature),
                 onErrorCallback);
     }
 
     public static void getHumidityForLocation(Context context, String latitude, String longitude,
-                                                 Consumer<Integer> onResponseCallback, Consumer<VolleyError> onErrorCallback) {
+                                              Consumer<Integer> onResponseCallback, Consumer<VolleyError> onErrorCallback) {
         OpenWeatherClient.getDailyWeatherForLocation(context, latitude, longitude,
                 getOnResponseCallback(onResponseCallback, OpenWeatherConverter::getHumidity),
                 onErrorCallback);

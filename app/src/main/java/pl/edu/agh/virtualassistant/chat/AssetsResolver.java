@@ -27,6 +27,9 @@ public class AssetsResolver {
                         }
 
                         InputStream in = assets.open(botName + "/" + dir + "/" + file);
+                        File outFile = new File(jayDir.getPath() + "/" + dir + "/" + file);
+                        outFile.getParentFile().mkdirs();
+                        outFile.createNewFile();
                         OutputStream out = new FileOutputStream(jayDir.getPath() + "/" + dir + "/" + file);
 
                         copyFile(in, out);

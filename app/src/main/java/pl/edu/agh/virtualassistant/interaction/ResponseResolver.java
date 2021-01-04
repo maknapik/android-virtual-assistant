@@ -1,17 +1,14 @@
 package pl.edu.agh.virtualassistant.interaction;
 
-import android.content.res.Resources;
+import pl.edu.agh.virtualassistant.MainActivity;
+import pl.edu.agh.virtualassistant.service.LocationService;
+import pl.edu.agh.virtualassistant.service.WeatherService;
+import pl.edu.agh.virtualassistant.voice.VoiceControl;
 
 import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import pl.edu.agh.virtualassistant.MainActivity;
-import pl.edu.agh.virtualassistant.service.JokeService;
-import pl.edu.agh.virtualassistant.service.LocationService;
-import pl.edu.agh.virtualassistant.service.WeatherService;
-import pl.edu.agh.virtualassistant.voice.VoiceControl;
 
 public class ResponseResolver {
 
@@ -58,12 +55,17 @@ public class ResponseResolver {
                         description -> say("The weather at current location can be described as " + description),
                         error -> say("I cannot check the weather for current location"));
             });
-        } else if (userUtterance.contains("joke")) {
-            JokeService.getRandomJoke(mainActivity,
-                    joke -> say("Joke for today is: " + joke),
-                    error -> say("I don't know any jokes."));
-        } else {
-            say("I don't understand.");
+        }
+        // TODO: remove jokes API?
+        // } else if (userUtterance.contains("joke")) {
+        // JokeService.getRandomJoke(mainActivity,
+        //      joke -> say("Joke for today is: " + joke),
+        //      error -> say("I don't know any jokes."));
+        // }
+        else {
+            // TODO: use service approach
+            String response = mainActivity.askAlice(userUtterance);
+            say(response);
         }
     }
 

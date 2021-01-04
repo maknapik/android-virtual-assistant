@@ -7,15 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import java.text.DecimalFormat;
-
+import pl.edu.agh.virtualassistant.chat.AssetsResolver;
+import pl.edu.agh.virtualassistant.chat.ChatBot;
 import pl.edu.agh.virtualassistant.interaction.ResponseResolver;
 import pl.edu.agh.virtualassistant.voice.VoiceControl;
+
+import java.text.DecimalFormat;
 
 import static pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation.getSimpleTalkingAnimation;
 
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tempTextView;
     private Handler handler;
     private AnimationDrawable avatarAnimation;
+    private ChatBot chatBot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         tempTextView = findViewById(R.id.Temp);
         imageView = findViewById(R.id.avatarImage);
         imageView.setBackgroundResource(R.drawable.mouth_1a);
+
+        chatBot = initAlice();
     }
 
     private void requestPermissions() {
@@ -72,7 +75,16 @@ public class MainActivity extends AppCompatActivity {
         imageView.setImageResource(R.drawable.mouth_1a);
     }
 
+    public String askAlice(String message) {
+        return chatBot.askBot(message);
+    }
+
     public void runInMainThread(Runnable runnable) {
         handler.post(runnable);
+    }
+
+    private ChatBot initAlice() {
+        String ms = AssetsResolver.init(getResources(), getCacheDir());
+        return new ChatBot(ms);
     }
 }

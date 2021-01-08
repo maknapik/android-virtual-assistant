@@ -20,7 +20,7 @@ import java.text.DecimalFormat;
 import static pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation.getSimpleTalkingAnimation;
 
 public class MainActivity extends AppCompatActivity {
-    private static final DecimalFormat temperatureFormat = new DecimalFormat("0.#");
+
     private VoiceControl voiceControl;
     private ResponseResolver responseResolver;
     private ImageView imageView;
@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
         handler = new Handler();
         requestPermissions();
 
+        chatBot = initAlice();
         voiceControl = new VoiceControl(this);
-        responseResolver = new ResponseResolver(voiceControl, this);
+        responseResolver = new ResponseResolver(voiceControl, this, chatBot);
         voiceControl.setUp(
                 bundle -> tempTextView.setText("Ask for temperature or humidity in a city of your choosing."),
                 responseResolver::respond);
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.avatarImage);
         imageView.setBackgroundResource(R.drawable.mouth_1a);
 
-        chatBot = initAlice();
     }
 
     private void requestPermissions() {
@@ -73,10 +73,6 @@ public class MainActivity extends AppCompatActivity {
             avatarAnimation.stop();
         }
         imageView.setImageResource(R.drawable.mouth_1a);
-    }
-
-    public String askAlice(String message) {
-        return chatBot.askBot(message);
     }
 
     public void runInMainThread(Runnable runnable) {

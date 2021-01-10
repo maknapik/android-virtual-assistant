@@ -32,11 +32,13 @@ public class OpenWeatherConverter {
     }
 
     public static ShortWeather getShortWeather(Weather weather) {
+        String city = weather.getName();
+        String description = weather.getWeather().get(0).getDescription();
         double temperature = getTemperature(weather);
         int humidity = getHumidity(weather);
         double windSpeed = getWindSpeed(weather);
 
-        return new ShortWeather(temperature, humidity, windSpeed);
+        return new ShortWeather(city, description, temperature, humidity, windSpeed);
     }
 
     public static double getTemperature(Weather weather) {
@@ -59,21 +61,23 @@ public class OpenWeatherConverter {
         return weather.getWind().getSpeed();
     }
 
-    public static List<ShortWeather> getShortWeatherList(CitiesInCircleWeather citiesInCircleWeather) {
-        List<ShortWeather> shortWeatherList = new ArrayList<>();
+    public static List<ShortWeather> getShortWeathers(CitiesInCircleWeather citiesInCircleWeather) {
+        List<ShortWeather> shortWeathers = new ArrayList<>();
         for (ListItem listItem : citiesInCircleWeather.getList()) {
-            shortWeatherList.add(getShortWeatherFromListItem(listItem));
+            shortWeathers.add(getShortWeathersFromListItem(listItem));
         }
 
-        return shortWeatherList;
+        return shortWeathers;
     }
 
-    private static ShortWeather getShortWeatherFromListItem(ListItem listItem) {
+    private static ShortWeather getShortWeathersFromListItem(ListItem listItem) {
+        String city = listItem.getName();
+        String description = listItem.getWeather().get(0).getDescription();
         double temperature = listItem.getMain().getTemp();
         int humidity = listItem.getMain().getHumidity();
         double windSpeed = listItem.getWind().getSpeed();
 
-        return new ShortWeather(temperature, humidity, windSpeed);
+        return new ShortWeather(city, description, temperature, humidity, windSpeed);
     }
 
 }

@@ -78,12 +78,12 @@ public class WeatherService {
                 onErrorCallback);
     }
 
-    public static void getShortWeatherForCitiesInCircle(Context context, String latitude,
+    public static void getShortWeathersForCitiesInCircle(Context context, String latitude,
                                                         String longitude, int citiesNumber,
                                                         Consumer<List<ShortWeather>> onResponseCallback,
                                                         Consumer<VolleyError> onErrorCallback) {
         OpenWeatherClient.getWeatherInCitiesInCircle(context, latitude, longitude, citiesNumber,
-                getOnResponseCallback(onResponseCallback, OpenWeatherConverter::getShortWeatherList),
+                getOnResponseCallback(onResponseCallback, OpenWeatherConverter::getShortWeathers),
                 onErrorCallback);
     }
 

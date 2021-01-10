@@ -41,6 +41,15 @@ public class LocationInteraction implements Interaction {
 
                 nextInteraction.process(userUtterance, currentKnowledge);
             });
+        } else if (userUtterance.contains("neighborhood")) {
+            currentKnowledge.put("neighborhood", "neighborhood");
+
+            LocationService.getLocation(mainActivity, (latitude, longitude) -> {
+                currentKnowledge.put("latitude", latitude);
+                currentKnowledge.put("longitude", longitude);
+
+                nextInteraction.process(userUtterance, currentKnowledge);
+            });
         } else {
             voiceControl.say("Say the name of the city you want to get the " + currentKnowledge.get("action") + " for.");
             voiceControl.setSpeechRecognitionCallbacks(null, userAnswer -> {

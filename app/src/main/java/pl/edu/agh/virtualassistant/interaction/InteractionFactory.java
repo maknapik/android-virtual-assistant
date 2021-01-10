@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import pl.edu.agh.virtualassistant.MainActivity;
-import pl.edu.agh.virtualassistant.chat.AssetsResolver;
 import pl.edu.agh.virtualassistant.chat.ChatBot;
 import pl.edu.agh.virtualassistant.interaction.weather.HumidityInteraction;
 import pl.edu.agh.virtualassistant.interaction.weather.HumidityInteractionProvider;
@@ -19,7 +18,7 @@ import pl.edu.agh.virtualassistant.voice.VoiceControl;
 
 public class InteractionFactory {
 
-    private List<Interaction> providers;
+    private final List<Interaction> providers;
 
     InteractionFactory(MainActivity mainActivity, VoiceControl voiceControl,
                        Consumer<String> onRecognitionResult, ChatBot chatBot) {
@@ -28,6 +27,7 @@ public class InteractionFactory {
         providers.add(getWeatherInteractionFlow(mainActivity, voiceControl, onRecognitionResult));
         providers.add(getTemperatureInteractionFlow(mainActivity, voiceControl, onRecognitionResult));
         providers.add(geHumidityInteractionFlow(mainActivity, voiceControl, onRecognitionResult));
+        providers.add(new CountryInformationInteractionProvider(mainActivity, voiceControl));
         providers.add(new JokeInteractionProvider(mainActivity, voiceControl));
         providers.add(new ChatBotInteractionProvider(voiceControl, chatBot));
     }

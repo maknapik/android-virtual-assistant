@@ -43,8 +43,7 @@ public class WeatherInteraction implements Interaction {
                         }
                         say(description.toString());
                     },
-                    error -> {
-                    });
+                    error -> say("I cannot check the weather for neighborhood"));
         } else if (currentKnowledge.containsKey("latitude")
                 && currentKnowledge.containsKey("longitude")) {
             String latitude = currentKnowledge.get("latitude");

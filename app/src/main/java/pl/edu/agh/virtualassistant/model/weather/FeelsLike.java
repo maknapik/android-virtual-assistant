@@ -1,34 +1,16 @@
-package pl.edu.agh.virtualassistant.model;
+package pl.edu.agh.virtualassistant.model.weather;
 
-public class Temp{
-	private double min;
-	private double max;
-	private int eve;
+public class FeelsLike{
+	private double eve;
 	private double night;
 	private double day;
 	private double morn;
 
-	public void setMin(double min){
-		this.min = min;
-	}
-
-	public double getMin(){
-		return min;
-	}
-
-	public void setMax(double max){
-		this.max = max;
-	}
-
-	public double getMax(){
-		return max;
-	}
-
-	public void setEve(int eve){
+	public void setEve(double eve){
 		this.eve = eve;
 	}
 
-	public int getEve(){
+	public double getEve(){
 		return eve;
 	}
 

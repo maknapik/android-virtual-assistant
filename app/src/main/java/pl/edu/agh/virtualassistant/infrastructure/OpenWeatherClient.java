@@ -11,9 +11,9 @@ import org.json.JSONObject;
 import java.util.function.Consumer;
 
 import pl.edu.agh.virtualassistant.error.Notification;
-import pl.edu.agh.virtualassistant.model.CitiesInCircleWeather;
-import pl.edu.agh.virtualassistant.model.LocationDailyWeather;
-import pl.edu.agh.virtualassistant.model.Weather;
+import pl.edu.agh.virtualassistant.model.weather.CitiesInCircleWeather;
+import pl.edu.agh.virtualassistant.model.weather.LocationDailyWeather;
+import pl.edu.agh.virtualassistant.model.weather.Weather;
 
 public class OpenWeatherClient {
 

@@ -1,4 +1,4 @@
-package pl.edu.agh.virtualassistant.model;
+package pl.edu.agh.virtualassistant.model.weather;
 
 public class Coord{
 	private double lon;

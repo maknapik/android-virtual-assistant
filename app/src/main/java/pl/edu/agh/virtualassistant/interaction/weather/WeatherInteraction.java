@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import pl.edu.agh.virtualassistant.MainActivity;
 import pl.edu.agh.virtualassistant.interaction.Interaction;
-import pl.edu.agh.virtualassistant.model.ShortWeather;
+import pl.edu.agh.virtualassistant.model.weather.ShortWeather;
 import pl.edu.agh.virtualassistant.service.WeatherService;
 import pl.edu.agh.virtualassistant.voice.VoiceControl;
 

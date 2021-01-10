@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 import pl.edu.agh.virtualassistant.converter.OpenWeatherConverter;
 import pl.edu.agh.virtualassistant.infrastructure.OpenWeatherClient;
-import pl.edu.agh.virtualassistant.model.ShortWeather;
+import pl.edu.agh.virtualassistant.model.weather.ShortWeather;
 
 public class WeatherService {
 

@@ -1,31 +1,22 @@
-package pl.edu.agh.virtualassistant.model;
+package pl.edu.agh.virtualassistant.model.weather;
 
 import java.util.List;
 
-public class DailyItem{
-	private double rain;
+public class Current{
 	private int sunrise;
-	private Temp temp;
+	private double temp;
+	private int visibility;
 	private double uvi;
 	private int pressure;
 	private int clouds;
-	private FeelsLike feelsLike;
+	private double feelsLike;
 	private int dt;
-	private int pop;
 	private int windDeg;
 	private double dewPoint;
 	private int sunset;
 	private List<WeatherItem> weather;
 	private int humidity;
 	private double windSpeed;
-
-	public void setRain(double rain){
-		this.rain = rain;
-	}
-
-	public double getRain(){
-		return rain;
-	}
 
 	public void setSunrise(int sunrise){
 		this.sunrise = sunrise;
@@ -35,12 +26,20 @@ public class DailyItem{
 		return sunrise;
 	}
 
-	public void setTemp(Temp temp){
+	public void setTemp(double temp){
 		this.temp = temp;
 	}
 
-	public Temp getTemp(){
+	public double getTemp(){
 		return temp;
+	}
+
+	public void setVisibility(int visibility){
+		this.visibility = visibility;
+	}
+
+	public int getVisibility(){
+		return visibility;
 	}
 
 	public void setUvi(double uvi){
@@ -67,11 +66,11 @@ public class DailyItem{
 		return clouds;
 	}
 
-	public void setFeelsLike(FeelsLike feelsLike){
+	public void setFeelsLike(double feelsLike){
 		this.feelsLike = feelsLike;
 	}
 
-	public FeelsLike getFeelsLike(){
+	public double getFeelsLike(){
 		return feelsLike;
 	}
 
@@ -81,14 +80,6 @@ public class DailyItem{
 
 	public int getDt(){
 		return dt;
-	}
-
-	public void setPop(int pop){
-		this.pop = pop;
-	}
-
-	public int getPop(){
-		return pop;
 	}
 
 	public void setWindDeg(int windDeg){

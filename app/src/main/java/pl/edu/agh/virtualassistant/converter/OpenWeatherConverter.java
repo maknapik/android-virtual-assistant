@@ -3,12 +3,12 @@ package pl.edu.agh.virtualassistant.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.edu.agh.virtualassistant.model.CitiesInCircleWeather;
-import pl.edu.agh.virtualassistant.model.ListItem;
-import pl.edu.agh.virtualassistant.model.LocationDailyWeather;
-import pl.edu.agh.virtualassistant.model.ShortWeather;
-import pl.edu.agh.virtualassistant.model.Weather;
-import pl.edu.agh.virtualassistant.model.WeatherItem;
+import pl.edu.agh.virtualassistant.model.weather.CitiesInCircleWeather;
+import pl.edu.agh.virtualassistant.model.weather.ListItem;
+import pl.edu.agh.virtualassistant.model.weather.LocationDailyWeather;
+import pl.edu.agh.virtualassistant.model.weather.ShortWeather;
+import pl.edu.agh.virtualassistant.model.weather.Weather;
+import pl.edu.agh.virtualassistant.model.weather.WeatherItem;
 
 public class OpenWeatherConverter {
 

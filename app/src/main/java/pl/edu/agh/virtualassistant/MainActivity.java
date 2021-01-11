@@ -15,8 +15,6 @@ import pl.edu.agh.virtualassistant.chat.ChatBot;
 import pl.edu.agh.virtualassistant.interaction.ResponseResolver;
 import pl.edu.agh.virtualassistant.voice.VoiceControl;
 
-import java.text.DecimalFormat;
-
 import static pl.edu.agh.virtualassistant.avatar.animation.SimpleAnimation.getSimpleTalkingAnimation;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private ResponseResolver responseResolver;
     private ImageView imageView;
     private TextView tempTextView;
+    private TextView tempTextView2;
     private Handler handler;
     private AnimationDrawable avatarAnimation;
     private ChatBot chatBot;
@@ -34,16 +33,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         handler = new Handler();
+
+        tempTextView = findViewById(R.id.Temp);
+        tempTextView2 = findViewById(R.id.Temp2);
+
         requestPermissions();
 
         chatBot = initAlice();
         voiceControl = new VoiceControl(this);
         responseResolver = new ResponseResolver(voiceControl, this, chatBot);
         voiceControl.setUp(
-                bundle -> tempTextView.setText("Ask for temperature or humidity in a city of your choosing."),
-                responseResolver::respond);
+                bundle -> tempTextView.setText("Listening"),
+                responseResolver::respond,
+                tempTextView, tempTextView2);
 
-        tempTextView = findViewById(R.id.Temp);
         imageView = findViewById(R.id.avatarImage);
         imageView.setBackgroundResource(R.drawable.mouth_1a);
 

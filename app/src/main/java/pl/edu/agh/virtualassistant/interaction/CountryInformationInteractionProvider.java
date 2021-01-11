@@ -56,7 +56,7 @@ public class CountryInformationInteractionProvider implements Interaction {
     }
 
     private String getCountryDescription(ShortCountry shortCountry) {
-        return shortCountry.getName() + "is located in " + shortCountry.getRegion() +
+        return shortCountry.getName() + " is located in " + shortCountry.getRegion() +
                 ". The capital is " + shortCountry.getCapital() + ". The population counts " +
                 shortCountry.getPopulation() + " people and the currency is " + shortCountry.getCurrency();
     }

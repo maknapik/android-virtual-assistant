@@ -6,11 +6,14 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.ViewUtils;
 
 import com.google.android.material.chip.Chip;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -28,6 +31,7 @@ public class VoiceControl {
     private Intent speechRecognizerIntent;
     private final MainActivity mainActivity;
     private final AtomicBoolean initialized = new AtomicBoolean(false);
+    private TextView utterance;
     Consumer<Bundle> readyForSpeech;
     Consumer<String> onRecognitionResult;
 
@@ -43,7 +47,9 @@ public class VoiceControl {
      * @param onRecognitionResult function executed when speech-to-text recognizes a complete utterance (a word or sentence followed by a short pause).
      *                            Recognized text is given as an argument.
      */
-    public void setUp(Consumer<Bundle> readyForSpeech, Consumer<String> onRecognitionResult) {
+    public void setUp(Consumer<Bundle> readyForSpeech, Consumer<String> onRecognitionResult,
+                      TextView textView, TextView utterance) {
+        this.utterance = utterance;
         this.readyForSpeech = readyForSpeech;
         this.onRecognitionResult = onRecognitionResult;
         assert readyForSpeech != null && onRecognitionResult != null;
@@ -51,7 +57,7 @@ public class VoiceControl {
         textToSpeech = new TextToSpeech(mainActivity, status -> {
             if (status != TextToSpeech.ERROR) {
                 textToSpeech.setLanguage(locale);
-                textToSpeech.setOnUtteranceProgressListener(new OnUtteranceProgressListener());
+                textToSpeech.setOnUtteranceProgressListener(new OnUtteranceProgressListener(textView, utterance));
             } else {
                 System.out.println("Error on setting up text to speech.");
             }
@@ -121,6 +127,7 @@ public class VoiceControl {
      * Stop listening, say supplied text and start listening again. Works only if {@link #isInitialized()} returns true.
      **/
     public void say(String textToSpeak) {
+        utterance.setText(textToSpeak);
         speechRecognizer.stopListening();
         mainActivity.runInMainThread(() -> mainActivity.startAvatarAnimation(textToSpeak));
         textToSpeech.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null, Long.toString(System.currentTimeMillis()));
@@ -136,18 +143,30 @@ public class VoiceControl {
 
     private class OnUtteranceProgressListener extends UtteranceProgressListener {
 
+        private TextView textView;
+        private TextView textView2;
+
+        public OnUtteranceProgressListener(TextView textView, TextView textView2) {
+            this.textView = textView;
+            this.textView2 = textView2;
+        }
+
         @Override
         public void onStart(String utteranceId) {
-
+            textView.setText("Processing");
         }
 
         @Override
         public void onDone(String utteranceId) {
             mainActivity.runInMainThread(mainActivity::stopAvatarAnimation);
+            textView.setText("Tap the button and speak");
+            textView2.setText("");
         }
 
         @Override
         public void onError(String utteranceId) {
+            textView.setText("Error occurred");
+            textView2.setText("");
         }
     }
 }
